@@ -1,152 +1,165 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>App de Música</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Netflix Clone Pro</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #121212;
-      color: white;
-      margin: 0;
-    }
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#141414;
+  color:white;
+}
 
-    header {
-      background: #1db954;
-      padding: 20px;
-      text-align: center;
-      font-size: 22px;
-      font-weight: bold;
-    }
+/* HEADER */
+header{
+  display:flex;
+  justify-content:space-between;
+  padding:15px;
+  background:black;
+  position:sticky;
+  top:0;
+}
 
-    .container {
-      max-width: 800px;
-      margin: auto;
-      padding: 20px;
-    }
+.logo{color:#e50914;font-size:22px;font-weight:bold}
 
-    .search-box input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-      margin-bottom: 20px;
-      outline: none;
-    }
+input{
+  padding:8px;
+  border-radius:5px;
+  border:none;
+}
 
-    .music {
-      background: #222;
-      padding: 15px;
-      margin-bottom: 10px;
-      border-radius: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+/* ROW */
+.row{
+  display:flex;
+  overflow-x:auto;
+  gap:10px;
+  padding:10px;
+}
 
-    .tag {
-      font-size: 12px;
-      padding: 3px 8px;
-      border-radius: 5px;
-      background: #333;
-      margin-left: 10px;
-      color: #aaa;
-    }
+.card{
+  min-width:150px;
+  cursor:pointer;
+  transition:0.3s;
+}
 
-    button {
-      background: #1db954;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 6px;
-      color: white;
-      cursor: pointer;
-    }
+.card img{
+  width:150px;
+  border-radius:8px;
+}
 
-    button:hover {
-      background: #17a74a;
-    }
+.card:hover{
+  transform:scale(1.1);
+}
 
-    audio {
-      width: 100%;
-      margin-top: 20px;
-    }
-  </style>
+/* MODAL */
+.modal{
+  display:none;
+  position:fixed;
+  top:0;left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.9);
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-content{
+  background:#222;
+  padding:20px;
+  border-radius:10px;
+  width:300px;
+  text-align:center;
+}
+
+button{
+  padding:10px;
+  border:none;
+  cursor:pointer;
+  margin-top:10px;
+  border-radius:5px;
+}
+</style>
 </head>
 
 <body>
 
-<header>🎵 Meu App de Música</header>
+<header>
+  <div class="logo">NETFLIX PRO</div>
+  <input id="search" placeholder="Buscar..." onkeyup="searchMovies()">
+</header>
 
-<div class="container">
+<h3 style="padding:10px">🔥 Populares</h3>
+<div class="row" id="movies"></div>
 
-  <div class="search-box">
-    <input 
-      type="text" 
-      id="search" 
-      placeholder="🔎 Pesquise músicas..." 
-      onkeyup="filtrarMusicas()"
-    />
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <h3 id="title"></h3>
+    <button onclick="addFav()">⭐ Favoritar</button>
+    <button onclick="closeModal()">Fechar</button>
   </div>
-
-  <div id="listaMusicas">
-
-    <!-- BRASIL -->
-    <div class="music" data-name="ai se eu te pego michel telo brasil">
-      <span>Ai Se Eu Te Pego - Michel Teló <span class="tag">Brasil</span></span>
-      <button onclick="tocar('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')">Tocar</button>
-    </div>
-
-    <div class="music" data-name="so se for agora gloria groove brasil">
-      <span>Só Se For Agora - Gloria Groove <span class="tag">Brasil</span></span>
-      <button onclick="tocar('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3')">Tocar</button>
-    </div>
-
-    <div class="music" data-name="garota de ipanema tom jobim brasil bossa nova">
-      <span>Garota de Ipanema - Tom Jobim <span class="tag">Brasil</span></span>
-      <button onclick="tocar('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3')">Tocar</button>
-    </div>
-
-    <!-- INTERNACIONAIS -->
-    <div class="music" data-name="shape of you ed sheeran international">
-      <span>Shape of You - Ed Sheeran <span class="tag">Internacional</span></span>
-      <button onclick="tocar('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3')">Tocar</button>
-    </div>
-
-    <div class="music" data-name="blinding lights the weeknd international">
-      <span>Blinding Lights - The Weeknd <span class="tag">Internacional</span></span>
-      <button onclick="tocar('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3')">Tocar</button>
-    </div>
-
-    <div class="music" data-name="believer imagine dragons international rock">
-      <span>Believer - Imagine Dragons <span class="tag">Internacional</span></span>
-      <button onclick="tocar('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3')">Tocar</button>
-    </div>
-
-  </div>
-
-  <audio id="player" controls></audio>
-
 </div>
 
 <script>
-  function tocar(url) {
-    const player = document.getElementById("player");
-    player.src = url;
-    player.play();
-  }
+const API = "YOUR_API_KEY";
+const IMG = "https://image.tmdb.org/t/p/w500";
 
-  function filtrarMusicas() {
-    const input = document.getElementById("search").value.toLowerCase();
-    const musicas = document.querySelectorAll(".music");
+let moviesData = [];
+let selectedMovie = null;
+let favorites = JSON.parse(localStorage.getItem("fav")) || [];
 
-    musicas.forEach(m => {
-      const nome = m.getAttribute("data-name");
-      m.style.display = nome.includes(input) ? "flex" : "none";
-    });
+/* BUSCA FILMES */
+async function loadMovies(){
+  const res = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API}`);
+  const data = await res.json();
+  moviesData = data.results;
+  render(moviesData);
+}
+
+function render(list){
+  const container = document.getElementById("movies");
+  container.innerHTML = "";
+
+  list.forEach(m=>{
+    container.innerHTML += `
+      <div class="card" onclick="openMovie('${m.title}')">
+        <img src="${IMG + m.poster_path}">
+      </div>
+    `;
+  });
+}
+
+/* MODAL */
+function openMovie(title){
+  selectedMovie = title;
+  document.getElementById("title").innerText = title;
+  document.getElementById("modal").style.display = "flex";
+}
+
+function closeModal(){
+  document.getElementById("modal").style.display = "none";
+}
+
+/* FAVORITOS */
+function addFav(){
+  if(!favorites.includes(selectedMovie)){
+    favorites.push(selectedMovie);
+    localStorage.setItem("fav", JSON.stringify(favorites));
+    alert("Adicionado aos favoritos ⭐");
   }
+}
+
+/* SEARCH */
+function searchMovies(){
+  const q = document.getElementById("search").value.toLowerCase();
+  const filtered = moviesData.filter(m => m.title.toLowerCase().includes(q));
+  render(filtered);
+}
+
+loadMovies();
 </script>
 
 </body>
