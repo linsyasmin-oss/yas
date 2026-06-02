@@ -1,77 +1,153 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Meu App de Música</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>App de Música</title>
+
   <style>
     body {
-      font-family: Arial;
-      background: #111;
+      font-family: Arial, sans-serif;
+      background: #121212;
       color: white;
+      margin: 0;
+    }
+
+    header {
+      background: #1db954;
+      padding: 20px;
       text-align: center;
+      font-size: 22px;
+      font-weight: bold;
     }
-    .player {
-      margin-top: 50px;
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
     }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      margin-bottom: 20px;
+      outline: none;
+    }
+
+    .music {
+      background: #222;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .tag {
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 5px;
+      background: #333;
+      margin-left: 10px;
+      color: #aaa;
+    }
+
     button {
-      padding: 10px 20px;
-      margin: 5px;
+      background: #1db954;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      color: white;
       cursor: pointer;
     }
-    .song {
-      margin: 10px;
-      padding: 10px;
-      background: #222;
-      border-radius: 8px;
+
+    button:hover {
+      background: #17a74a;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 20px;
     }
   </style>
 </head>
+
 <body>
 
-  <h1>🎵 Meu App de Música</h1>
+<header>🎵 Meu App de Música</header>
 
-  <div class="player">
-    <audio id="audio" controls>
-      <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
-    </audio>
-    <br>
-    <button onclick="playMusic()">▶ Play</button>
-    <button onclick="pauseMusic()">⏸ Pause</button>
+<div class="container">
+
+  <div class="search-box">
+    <input 
+      type="text" 
+      id="search" 
+      placeholder="🔎 Pesquise músicas..." 
+      onkeyup="filtrarMusicas()"
+    />
   </div>
 
-  <h2>Músicas</h2>
+  <div id="listaMusicas">
 
-  <div class="song">
-    SoundHelix Song 1
-    <button onclick="changeSong()">Tocar</button>
+    <!-- BRASIL -->
+    <div class="music" data-name="ai se eu te pego michel telo brasil">
+      <span>Ai Se Eu Te Pego - Michel Teló <span class="tag">Brasil</span></span>
+      <button onclick="tocar('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')">Tocar</button>
+    </div>
+
+    <div class="music" data-name="so se for agora gloria groove brasil">
+      <span>Só Se For Agora - Gloria Groove <span class="tag">Brasil</span></span>
+      <button onclick="tocar('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3')">Tocar</button>
+    </div>
+
+    <div class="music" data-name="garota de ipanema tom jobim brasil bossa nova">
+      <span>Garota de Ipanema - Tom Jobim <span class="tag">Brasil</span></span>
+      <button onclick="tocar('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3')">Tocar</button>
+    </div>
+
+    <!-- INTERNACIONAIS -->
+    <div class="music" data-name="shape of you ed sheeran international">
+      <span>Shape of You - Ed Sheeran <span class="tag">Internacional</span></span>
+      <button onclick="tocar('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3')">Tocar</button>
+    </div>
+
+    <div class="music" data-name="blinding lights the weeknd international">
+      <span>Blinding Lights - The Weeknd <span class="tag">Internacional</span></span>
+      <button onclick="tocar('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3')">Tocar</button>
+    </div>
+
+    <div class="music" data-name="believer imagine dragons international rock">
+      <span>Believer - Imagine Dragons <span class="tag">Internacional</span></span>
+      <button onclick="tocar('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3')">Tocar</button>
+    </div>
+
   </div>
 
-  <div class="song">
-    SoundHelix Song 2
-    <button onclick="changeSong2()">Tocar</button>
-  </div>
+  <audio id="player" controls></audio>
 
-  <script>
-    const audio = document.getElementById("audio");
+</div>
 
-    function playMusic() {
-      audio.play();
-    }
+<script>
+  function tocar(url) {
+    const player = document.getElementById("player");
+    player.src = url;
+    player.play();
+  }
 
-    function pauseMusic() {
-      audio.pause();
-    }
+  function filtrarMusicas() {
+    const input = document.getElementById("search").value.toLowerCase();
+    const musicas = document.querySelectorAll(".music");
 
-    function changeSong() {
-      audio.src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
-      audio.play();
-    }
-
-    function changeSong2() {
-      audio.src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3";
-      audio.play();
-    }
-  </script>
+    musicas.forEach(m => {
+      const nome = m.getAttribute("data-name");
+      m.style.display = nome.includes(input) ? "flex" : "none";
+    });
+  }
+</script>
 
 </body>
 </html>
