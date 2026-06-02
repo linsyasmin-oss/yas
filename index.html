@@ -1,12 +1,77 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Meu App de Música</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #111;
+      color: white;
+      text-align: center;
+    }
+    .player {
+      margin-top: 50px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+    }
+    .song {
+      margin: 10px;
+      padding: 10px;
+      background: #222;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
-<h1>amo meus migos</h1>
-<p>julinha</p>
+
+  <h1>🎵 Meu App de Música</h1>
+
+  <div class="player">
+    <audio id="audio" controls>
+      <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+    </audio>
+    <br>
+    <button onclick="playMusic()">▶ Play</button>
+    <button onclick="pauseMusic()">⏸ Pause</button>
+  </div>
+
+  <h2>Músicas</h2>
+
+  <div class="song">
+    SoundHelix Song 1
+    <button onclick="changeSong()">Tocar</button>
+  </div>
+
+  <div class="song">
+    SoundHelix Song 2
+    <button onclick="changeSong2()">Tocar</button>
+  </div>
+
+  <script>
+    const audio = document.getElementById("audio");
+
+    function playMusic() {
+      audio.play();
+    }
+
+    function pauseMusic() {
+      audio.pause();
+    }
+
+    function changeSong() {
+      audio.src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+      audio.play();
+    }
+
+    function changeSong2() {
+      audio.src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3";
+      audio.play();
+    }
+  </script>
+
 </body>
 </html>
