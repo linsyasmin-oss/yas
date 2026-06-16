@@ -1,165 +1,300 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Netflix Clone Pro</title>
+<title>CineMax Pro</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
 body{
-  margin:0;
-  font-family:Arial;
-  background:#141414;
-  color:white;
+    background:#0f0f0f;
+    color:white;
 }
 
-/* HEADER */
 header{
-  display:flex;
-  justify-content:space-between;
-  padding:15px;
-  background:black;
-  position:sticky;
-  top:0;
+    background:#111;
+    padding:15px 30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:100;
 }
 
-.logo{color:#e50914;font-size:22px;font-weight:bold}
-
-input{
-  padding:8px;
-  border-radius:5px;
-  border:none;
+.logo{
+    color:#e50914;
+    font-size:32px;
+    font-weight:700;
 }
 
-/* ROW */
-.row{
-  display:flex;
-  overflow-x:auto;
-  gap:10px;
-  padding:10px;
+.profile{
+    display:flex;
+    align-items:center;
+    gap:12px;
 }
 
-.card{
-  min-width:150px;
-  cursor:pointer;
-  transition:0.3s;
+.profile img{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    border:2px solid #e50914;
 }
 
-.card img{
-  width:150px;
-  border-radius:8px;
+.hero{
+    height:450px;
+    background:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.9)),
+    url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba');
+    background-size:cover;
+    background-position:center;
+    display:flex;
+    align-items:center;
+    padding:50px;
 }
 
-.card:hover{
-  transform:scale(1.1);
+.hero-content h1{
+    font-size:60px;
 }
 
-/* MODAL */
-.modal{
-  display:none;
-  position:fixed;
-  top:0;left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.9);
-  justify-content:center;
-  align-items:center;
+.hero-content p{
+    max-width:600px;
+    margin:15px 0;
 }
 
-.modal-content{
-  background:#222;
-  padding:20px;
-  border-radius:10px;
-  width:300px;
-  text-align:center;
+.btn{
+    background:#e50914;
+    border:none;
+    color:white;
+    padding:12px 25px;
+    border-radius:6px;
+    cursor:pointer;
 }
 
-button{
-  padding:10px;
-  border:none;
-  cursor:pointer;
-  margin-top:10px;
-  border-radius:5px;
+.container{
+    width:92%;
+    margin:auto;
+}
+
+.search{
+    margin:30px 0;
+}
+
+.search input{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:30px;
+    font-size:16px;
+}
+
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+    margin-bottom:30px;
+}
+
+.card-stat{
+    background:#1a1a1a;
+    padding:20px;
+    border-radius:15px;
+}
+
+.movies{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:20px;
+    margin-bottom:40px;
+}
+
+.movie{
+    background:#1b1b1b;
+    border-radius:15px;
+    overflow:hidden;
+    transition:.3s;
+}
+
+.movie:hover{
+    transform:translateY(-8px);
+}
+
+.movie img{
+    width:100%;
+    height:320px;
+    object-fit:cover;
+}
+
+.info{
+    padding:15px;
+}
+
+.info h3{
+    margin-bottom:10px;
+}
+
+.buttons{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+}
+
+.buttons button{
+    flex:1;
+    border:none;
+    padding:10px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.favorite{
+    background:#ffb300;
+}
+
+.trailer{
+    background:#e50914;
+    color:white;
+}
+
+footer{
+    text-align:center;
+    padding:30px;
+    background:#111;
 }
 </style>
 </head>
-
 <body>
 
 <header>
-  <div class="logo">NETFLIX PRO</div>
-  <input id="search" placeholder="Buscar..." onkeyup="searchMovies()">
+    <div class="logo">CineMax</div>
+
+    <div class="profile">
+        <img src="https://i.pravatar.cc/200?img=32">
+        <div>
+            <strong>Usuário Premium</strong><br>
+            <small>Plano Ultra HD</small>
+        </div>
+    </div>
 </header>
 
-<h3 style="padding:10px">🔥 Populares</h3>
-<div class="row" id="movies"></div>
+<section class="hero">
+    <div class="hero-content">
+        <h1>Bem-vindo ao CineMax</h1>
+        <p>Explore centenas de filmes aleatórios, adicione favoritos e descubra novos lançamentos.</p>
+        <button class="btn">Assistir Agora</button>
+    </div>
+</section>
 
-<!-- MODAL -->
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <h3 id="title"></h3>
-    <button onclick="addFav()">⭐ Favoritar</button>
-    <button onclick="closeModal()">Fechar</button>
-  </div>
+<div class="container">
+
+<div class="search">
+    <input type="text" id="searchInput" placeholder="Pesquisar filmes...">
 </div>
 
+<div class="dashboard">
+    <div class="card-stat">
+        <h2 id="movieCount">100</h2>
+        <p>Filmes disponíveis</p>
+    </div>
+
+    <div class="card-stat">
+        <h2 id="favCount">0</h2>
+        <p>Favoritos</p>
+    </div>
+
+    <div class="card-stat">
+        <h2>4.9 ⭐</h2>
+        <p>Avaliação média</p>
+    </div>
+</div>
+
+<h2 style="margin-bottom:20px;">Catálogo</h2>
+
+<div class="movies" id="movies"></div>
+
+</div>
+
+<footer>
+© 2026 CineMax Streaming
+</footer>
+
 <script>
-const API = "YOUR_API_KEY";
-const IMG = "https://image.tmdb.org/t/p/w500";
 
-let moviesData = [];
-let selectedMovie = null;
-let favorites = JSON.parse(localStorage.getItem("fav")) || [];
+const movieNames = [
+"Avatar","Batman","Superman","Interestelar","Matrix",
+"Titanic","Gladiador","Oppenheimer","Duna","Vingadores",
+"Pantera Negra","Thor","Homem-Aranha","Transformers",
+"Missão Impossível","John Wick","Invocação do Mal",
+"Frozen","Toy Story","Shrek","Jurassic World",
+"Harry Potter","Senhor dos Anéis","Deadpool",
+"Venom","Aquaman","Godzilla","Kong","Top Gun",
+"Indiana Jones"
+];
 
-/* BUSCA FILMES */
-async function loadMovies(){
-  const res = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API}`);
-  const data = await res.json();
-  moviesData = data.results;
-  render(moviesData);
+const container = document.getElementById("movies");
+
+let favorites = 0;
+
+for(let i=1;i<=100;i++){
+
+let title = movieNames[Math.floor(Math.random()*movieNames.length)];
+
+container.innerHTML += `
+<div class="movie">
+<img src="https://picsum.photos/300/450?random=${i}">
+<div class="info">
+<h3>${title} ${i}</h3>
+<p>Filme incrível com muita ação e aventura.</p>
+
+<div>⭐⭐⭐⭐⭐</div>
+
+<div class="buttons">
+<button class="favorite" onclick="addFav()">❤️ Favorito</button>
+<button class="trailer" onclick="watchTrailer('${title}')">▶ Trailer</button>
+</div>
+
+</div>
+</div>
+`;
 }
 
-function render(list){
-  const container = document.getElementById("movies");
-  container.innerHTML = "";
-
-  list.forEach(m=>{
-    container.innerHTML += `
-      <div class="card" onclick="openMovie('${m.title}')">
-        <img src="${IMG + m.poster_path}">
-      </div>
-    `;
-  });
-}
-
-/* MODAL */
-function openMovie(title){
-  selectedMovie = title;
-  document.getElementById("title").innerText = title;
-  document.getElementById("modal").style.display = "flex";
-}
-
-function closeModal(){
-  document.getElementById("modal").style.display = "none";
-}
-
-/* FAVORITOS */
 function addFav(){
-  if(!favorites.includes(selectedMovie)){
-    favorites.push(selectedMovie);
-    localStorage.setItem("fav", JSON.stringify(favorites));
-    alert("Adicionado aos favoritos ⭐");
-  }
+favorites++;
+document.getElementById("favCount").innerText=favorites;
 }
 
-/* SEARCH */
-function searchMovies(){
-  const q = document.getElementById("search").value.toLowerCase();
-  const filtered = moviesData.filter(m => m.title.toLowerCase().includes(q));
-  render(filtered);
+function watchTrailer(movie){
+const url=`https://www.youtube.com/results?search_query=${encodeURIComponent(movie+' trailer')}`;
+window.open(url,'_blank');
 }
 
-loadMovies();
+document.getElementById("searchInput")
+.addEventListener("keyup",function(){
+
+const value=this.value.toLowerCase();
+
+document.querySelectorAll(".movie")
+.forEach(movie=>{
+
+const title=movie.querySelector("h3")
+.innerText.toLowerCase();
+
+movie.style.display=
+title.includes(value)
+? "block"
+: "none";
+
+});
+});
+
 </script>
 
 </body>
